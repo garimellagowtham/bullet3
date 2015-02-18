@@ -120,7 +120,7 @@ btScalar resolveSingleCollision(
 //bilateral constraint between two dynamic objects
 void resolveSingleBilateral(btRigidBody& body1, const btVector3& pos1,
                       btRigidBody& body2, const btVector3& pos2,
-                      btScalar distance, const btVector3& normal,btScalar& impulse ,btScalar timeStep)
+                      btScalar distance, const btVector3& normal,btScalar& impulse ,btScalar timeStep, btScalar contactDamping)
 {
 	(void)timeStep;
 	(void)distance;
@@ -161,7 +161,6 @@ void resolveSingleBilateral(btRigidBody& body1, const btVector3& pos1,
 	rel_vel = normal.dot(vel);
 	
 	//todo: move this into proper structure
-	btScalar contactDamping = btScalar(0.2);
 
 #ifdef ONLY_USE_LINEAR_MASS
 	btScalar massTerm = btScalar(1.) / (body1.getInvMass() + body2.getInvMass());

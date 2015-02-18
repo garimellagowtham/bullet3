@@ -1,0 +1,13 @@
+build3/BulletConfig.cmake
+build3/CMakeCache.txt
+build3/CMakeFiles/
+build3/Demos/
+build3/Demos3/
+build3/Extras/
+build3/Makefile
+build3/btgui/
+build3/bullet.pc
+build3/cmake_install.cmake
+build3/install_manifest.txt
+build3/src/
+build3/test/
