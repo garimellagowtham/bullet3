@@ -64,8 +64,7 @@ public:
 
 	///vertices must be in the format x,y,z, nx,ny,nz, u,v
 	virtual int registerShape(const float* vertices, int numvertices, const int* indices, int numIndices, int primitiveType=B3_GL_TRIANGLES, int textureIndex=-1);
-    
-
+	
 	virtual int	registerTexture(const unsigned char* texels, int width, int height);
 
 	///position x,y,z, quaternion x,y,z,w, color r,g,b,a, scaling x,y,z
@@ -94,6 +93,7 @@ public:
 	virtual void writeSingleInstanceTransformToGPU(float* position, float* orientation, int srcIndex);
 
 	virtual void writeSingleInstanceColorToCPU(float* color, int srcIndex);
+	virtual void writeSingleInstanceColorToCPU(double* color, int srcIndex);
 
 	virtual void getMouseDirection(float* dir, int mouseX, int mouseY);
 
@@ -104,6 +104,7 @@ public:
 	virtual void drawLines(const float* positions, const float color[4], int numPoints, int pointStrideInBytes, const unsigned int* indices, int numIndices, float pointDrawSize);
 	virtual void drawPoints(const float* positions, const float color[4], int numPoints, int pointStrideInBytes, float pointDrawSize);
 	virtual void drawPoint(const float* position, const float color[4], float pointSize=1);
+	virtual void drawPoint(const double* position, const double color[4], double pointDrawSize=1);
 	virtual void updateCamera(int upAxis=1);
 
 	virtual void	getCameraPosition(float cameraPos[4]);
@@ -139,6 +140,10 @@ public:
 	virtual void	setCameraPitch(float pitch);
 	virtual float	getCameraYaw() const;
 	virtual float	getCameraPitch() const;
+
+	virtual void	getCameraViewMatrix(float viewMat[16]) const;
+	virtual void	getCameraProjectionMatrix(float projMat[16]) const;
+
 
 	virtual void	resize(int width, int height);
 	virtual int	getScreenWidth()
