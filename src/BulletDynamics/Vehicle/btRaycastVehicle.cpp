@@ -583,7 +583,7 @@ void	btRaycastVehicle::updateFriction(btScalar	timeStep)
 				
 					resolveSingleBilateral(*m_chassisBody, wheelInfo.m_raycastInfo.m_contactPointWS,
 							  *groundObject, wheelInfo.m_raycastInfo.m_contactPointWS,
-							  btScalar(0.), m_axle[i],m_sideImpulse[i],timeStep, 1.0);
+							  btScalar(0.), m_axle[i],m_sideImpulse[i],timeStep, 0.8);
 
 					m_sideImpulse[i] *= sideFrictionStiffness2;
 						
