@@ -34,7 +34,8 @@ btRigidBody& btActionInterface::getFixedBody()
 
 btRaycastVehicle::btRaycastVehicle(const btVehicleTuning& tuning,btRigidBody* chassis,	btVehicleRaycaster* raycaster )
 :m_vehicleRaycaster(raycaster),
-m_pitchControl(btScalar(0.))
+m_pitchControl(btScalar(0.)),
+m_sideFrictionStiffness2(btScalar(0.8))
 {
 	m_chassisBody = chassis;
 	m_indexRightAxis = 0;
@@ -523,7 +524,6 @@ btScalar calcRollingFriction(btWheelContactPoint& contactPoint)
 
 
 
-btScalar sideFrictionStiffness2 = btScalar(1.0);
 void	btRaycastVehicle::updateFriction(btScalar	timeStep)
 {
 
@@ -583,9 +583,8 @@ void	btRaycastVehicle::updateFriction(btScalar	timeStep)
 				
 					resolveSingleBilateral(*m_chassisBody, wheelInfo.m_raycastInfo.m_contactPointWS,
 							  *groundObject, wheelInfo.m_raycastInfo.m_contactPointWS,
-							  btScalar(0.), m_axle[i],m_sideImpulse[i],timeStep, 0.8);
-
-					m_sideImpulse[i] *= sideFrictionStiffness2;
+							  btScalar(0.), m_axle[i],m_sideImpulse[i],timeStep, m_sideFrictionStiffness2);
+					//m_sideImpulse[i] *= sideFrictionStiffness2;
 						
 				}
 				
