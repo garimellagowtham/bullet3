@@ -185,6 +185,7 @@ btScalar btRaycastVehicle::rayCast(btWheelInfo& wheel)
 
 	btAssert(m_vehicleRaycaster);
 
+  //Casting Ray May access ground object simultaneously/////
 	void* object = m_vehicleRaycaster->castRay(source,target,rayResults);
 
 	wheel.m_raycastInfo.m_groundObject = 0;
@@ -295,6 +296,7 @@ void btRaycastVehicle::updateVehicle( btScalar step )
 	//
 	
 	int i=0;
+
 	for (i=0;i<m_wheelInfo.size();i++)
 	{
 		//btScalar depth; 
@@ -580,7 +582,7 @@ void	btRaycastVehicle::updateFriction(btScalar	timeStep)
 					m_forwardWS[i] = surfNormalWS.cross(m_axle[i]);
 					m_forwardWS[i].normalize();
 
-				
+			    //////Gowtham: This is a dangerous statement as multiple threads will access the Ground/////	
 					resolveSingleBilateral(*m_chassisBody, wheelInfo.m_raycastInfo.m_contactPointWS,
 							  *groundObject, wheelInfo.m_raycastInfo.m_contactPointWS,
 							  btScalar(0.), m_axle[i],m_sideImpulse[i],timeStep, m_sideFrictionStiffness2);
@@ -706,7 +708,7 @@ void	btRaycastVehicle::updateFriction(btScalar	timeStep)
 					m_chassisBody->applyImpulse(sideImp,rel_pos);
 
 					//apply friction impulse on the ground
-					groundObject->applyImpulse(-sideImp,rel_pos2);
+					//groundObject->applyImpulse(-sideImp,rel_pos2);///<Gowtham [We do not need moving ground do we ??]
 				}
 			}
 		}

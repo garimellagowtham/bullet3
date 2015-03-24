@@ -41,13 +41,16 @@ protected:
 		//m_app->m_stiffness_warp_on  = checked;
 	}
 public:
-	
-  
+
+#ifndef BT_NO_PROFILE 
 	CProfileIterator* profIter;
+#endif
 	
 	MyProfileWindow (	Gwen::Controls::Base* pParent)
-    : Gwen::Controls::WindowControl( pParent ),
-	profIter(0)
+    : Gwen::Controls::WindowControl( pParent )
+#ifndef BT_NO_PROFILE
+	,profIter(0)
+#endif
 	{
 		SetTitle( L"Time Profiler" );
 		
@@ -84,6 +87,7 @@ public:
 	}
 	
 	
+#ifndef BT_NO_PROFILE 
 	float	dumpRecursive(CProfileIterator* profileIterator, Gwen::Controls::TreeNode* parentNode)
 	{
 		profileIterator->First();
@@ -177,6 +181,7 @@ public:
 			
           //  int frames_since_reset = CProfileManager::Get_Frame_Count_Since_Reset();
 			
+#ifndef BT_NO_PROFILE 
             profileIterator->First();
 			
             double parent_time = profileIterator->Is_Root() ? time_since_reset : profileIterator->Get_Current_Parent_Total_Time();
@@ -187,6 +192,7 @@ public:
             double accumulated_time = dumpRecursive(profileIterator,m_node);
 			
             const char* name = profileIterator->Get_Current_Parent_Name();
+
 #ifdef _WIN32
             Gwen::UnicodeString uname = Gwen::Utility::StringToUnicode(name);
             Gwen::UnicodeString txt = Gwen::Utility::Format( L"Profiling: %s total time: %.3f ms, unaccounted %.3f %% :: %.3f ms", uname.c_str(), parent_time ,
@@ -198,6 +204,7 @@ public:
             //sprintf(blockTime,"--- Profiling: %s (total running time: %.3f ms) ---",	profileIterator->Get_Current_Parent_Name(), parent_time );
             //displayProfileString(xOffset,yStart,blockTime);
             m_node->SetText(txt);
+#endif
 			
 			
 			//printf("%s (%.3f %%) :: %.3f ms\n", "Unaccounted:",);
@@ -213,6 +220,15 @@ public:
 		}
 		
 	}
+#else
+	/*float	dumpRecursive(CProfileIterator* profileIterator, Gwen::Controls::TreeNode* parentNode)
+  {
+    return 0;
+  }
+  */
+#endif
+
+
 	void PrintText( const Gwen::UnicodeString& str )
 	{
 		
@@ -266,7 +282,9 @@ MyProfileWindow* setupProfileWindow(GwenInternalData* data)
 	MyMenuItems* menuItems = new MyMenuItems;
 	MyProfileWindow* profWindow = new MyProfileWindow(data->pCanvas);
 	//profWindow->SetHidden(true);	
+#ifndef BT_NO_PROFILE
 	profWindow->profIter = CProfileManager::Get_Iterator();
+#endif
 	data->m_viewMenu->GetMenu()->AddItem( L"Profiler", menuItems,(Gwen::Event::Handler::Function)&MyMenuItems::MenuItemSelect);
 	menuItems->m_profWindow = profWindow;
 	return profWindow;
@@ -278,7 +296,9 @@ void	processProfileData( MyProfileWindow* profWindow, bool idle)
 	if (profWindow)
 	{
 		
+#ifndef BT_NO_PROFILE
 		profWindow->UpdateText(profWindow->profIter, idle);
+#endif
 	}	
 }
 
